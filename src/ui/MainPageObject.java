@@ -30,4 +30,19 @@ public class MainPageObject {
         element.sendKeys(value);
         return element;
     }
+
+    public WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds) {
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
+        element.clear();
+        return element;
+    }
+
+    public Boolean elementExist(By by, String error_message, long timeoutInSeconds) {
+        try {
+            waitForElementPresent(by, error_message, timeoutInSeconds);
+            return Boolean.TRUE;
+        } catch (Exception e) {
+            return Boolean.FALSE;
+        }
+    }
 }

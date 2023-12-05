@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import ui.MainPageObject;
+import ui.SavedArticlesObject;
 import ui.SearchPageObject;
 
 import java.net.URL;
@@ -48,5 +49,37 @@ public class FirstTest extends CoreTestCase {
         searchPageObject.typeSearchLine("Кемеровский государственный университет");
         searchPageObject.waitForSearchResult("Высшее учебное заведение в Кемерове");
 
+    }
+
+    //В поисковой строке найти «Хоббит, или Туда и обратно».
+    // Перейти в статью, в крайнем верхнем правом углу нажать на три точки
+    // и выбрать «Добавить в список для чтения».
+    // Нажать «Понятно», указать название «Хоббит», нажать «Ок».
+    // Выбрать внизу «Просмотр списка».
+    // После чего нажать на три точки и удалить список для чтения полностью.
+    // Удостовериться, что в списке отсутствует добавленный ранее раздел «Хоббит».
+    @Test
+    public void testWorkWithReadingList() {
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SavedArticlesObject savedArticlesObject = new SavedArticlesObject(driver);
+
+        String listName = "Хоббит";
+
+        searchPageObject.initSearchInput();
+
+        searchPageObject.typeSearchLine("Хоббит, или Туда и обратно");
+        searchPageObject.clickBySearchResult("повесть английского писателя Джона Р. Р. Толкина");
+
+        savedArticlesObject.saveArticle(listName);
+
+        savedArticlesObject.returnToMainPage();
+
+        savedArticlesObject.openSavedTab();
+        savedArticlesObject.deleteArticlesList(listName);
+
+        String articlesListXpath = savedArticlesObject.getArticlesListXpath(listName);
+        Boolean isListExist = mainPageObject.elementExist(By.xpath(articlesListXpath), "Невозможно найти " + listName, 30);
+
+        Assert.assertEquals("Такой сохраненный список есть", Boolean.FALSE, isListExist);
     }
 }

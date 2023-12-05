@@ -7,7 +7,7 @@ public class SearchPageObject extends MainPageObject {
     private static final String
     SEARCH_INIT_ELEMENT = "//android.widget.TextView[@text=\"Поиск по Википедии\"]",
     SEARCH_INPUT = "//android.widget.EditText[@resource-id=\"org.wikipedia:id/search_src_text\"]",
-    SEARCH_RESULT = "//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_description\" and @text=\"высшее учебное заведение в Кемерове\"]";
+    SEARCH_RESULT = "//android.widget.TextView[@resource-id=\"org.wikipedia:id/page_list_item_description\" and @text=\"{SUBSTRING}\"]";
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -27,6 +27,11 @@ public class SearchPageObject extends MainPageObject {
 
     public void waitForSearchResult(String substring) {
         String search_result_xpath = getResultSearchElement(substring);
-        this.waitForElementPresent(By.xpath(search_result_xpath), "Невозможно найти" + substring, 15);
+        this.waitForElementPresent(By.xpath(search_result_xpath), "Невозможно найти " + substring, 15);
+    }
+
+    public void clickBySearchResult(String substring) {
+        String search_result_xpath = getResultSearchElement(substring);
+        this.waitForElementAndClick(By.xpath(search_result_xpath), "Невозможно найти " + substring, 15);
     }
 }
